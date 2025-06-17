@@ -10,7 +10,6 @@ easyVolcano(
   y = NULL,
   padj = y,
   fdrcutoff = 0.05,
-  pcutoff = 0.05,
   fccut = NULL,
   colScheme = c("darkgrey", "blue", "red"),
   xlab = expression("log"[2] ~ " fold change"),
@@ -38,9 +37,6 @@ p values are used for cut-off for significance instead of adjusted p values.}
 \item{fdrcutoff}{Cut-off for FDR significance. Defaults to FDR < 0.05. If \code{y}
 is specified manually and \code{padj} is left blank then this refers to the
 cut-off for significant points using nominal unadjusted p values.}
-
-\item{pcutoff}{Cut-off for nominal unadjusted P value significance if FDR is
-not used. Defaults to P < 0.05.}
 
 \item{fccut}{Optional vector of log fold change cut-offs.}
 
