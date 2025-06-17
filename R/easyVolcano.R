@@ -16,6 +16,8 @@
 #' @param fdrcutoff Cut-off for FDR significance. Defaults to FDR < 0.05. If `y` 
 #' is specified manually and `padj` is left blank then this refers to the 
 #' cut-off for significant points using nominal unadjusted p values. 
+#' @param pcutoff Cut-off for nominal unadjusted P value significance if FDR is 
+#' not used. Defaults to P < 0.05.
 #' @param fccut Optional vector of log fold change cut-offs.
 #' @param colScheme Colour scheme. If no fold change cut-off is set, 2 colours
 #' need to be specified. With a single fold change cut-off, 3 or 5 colours are
@@ -39,7 +41,7 @@
 
 
 easyVolcano <- function(data, x = NULL, y = NULL, padj = y,
-                        fdrcutoff = 0.05, fccut = NULL,
+                        fdrcutoff = 0.05, pcutoff = 0.05, fccut = NULL,
                         colScheme = c('darkgrey', 'blue', 'red'),
                         xlab = expression("log"[2] ~ " fold change"),
                         ylab = expression("-log"[10] ~ " P"),
@@ -79,9 +81,13 @@ easyVolcano <- function(data, x = NULL, y = NULL, padj = y,
     siggenes <- data[, padj] < fdrcutoff
   }
   siggenes[is.na(siggenes)] <- FALSE
-  if (sum(siggenes) >0) {
+  if (sum(siggenes) >0 & y != padj) {
     fdrline <- min(data[siggenes, 'log10P'])
-  } else fdrline <- NULL
+  } else if (sum(siggenes) >0 & y == padj){
+    fdrline <- -log(pcutoff, 10)
+  } else {
+    fdrline <- NULL
+  }
   if (showCounts) {
     up <- sum(siggenes & data[, x] > 0)
     down <- sum(siggenes & data[, x] < 0)
